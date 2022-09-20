@@ -1,7 +1,8 @@
 const ElmId = {
     overLayer: "ElmTracker-elementViewContainer",
     containerView: "ElmTracker-elementView",
-    activeSpan: "ElmTracker-ActiveSpan"
+    activeSpan: "ElmTracker-ActiveSpan",
+    follower: "ElmTracker-follower"
 }
 
 const activeSpan = document.createElement("span");
@@ -25,6 +26,7 @@ document.body.addEventListener("mousedown", (e) => {
         e.target.addEventListener("focus", disableClickFunc, true);
         genView(e.target); // View generator
         isActive.setAttribute("isActive", "progress");
+        document.getElementById(ElmId.follower).style.opacity = 0;
         setTimeout(() => {
             e.target.removeEventListener("click", disableClickFunc, true);
             e.target.removeEventListener("mousedown", disableClickFunc, true);
@@ -149,5 +151,6 @@ const genView = (elm) => {
 const removeLayout = () => {
     const elementViewContainer = document.getElementById(ElmId.overLayer);
     document.getElementById(ElmId.activeSpan).setAttribute("isActive", "active");
+    document.getElementById(ElmId.follower).style.opacity = 1;
     elementViewContainer.remove();
 }

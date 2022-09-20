@@ -18,7 +18,7 @@ chrome.action.onClicked.addListener(({ id }) => {
     switch (res[0].result) {
       case "first":
         chrome.action.setBadgeText({ tabId: id, text: "active" });
-        chrome.scripting.executeScript({ target: { tabId: id }, files: ["init.js"] });
+        chrome.scripting.executeScript({ target: { tabId: id }, files: ["init.js", "cursorFollower.js"] });
         break;
       case "active":
         chrome.action.setBadgeText({ tabId: id, text: "active" });
