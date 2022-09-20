@@ -1,0 +1,20 @@
+{
+  "name": "ElmTracker",
+  "version": "0.0.0.1",
+  "manifest_version": 3,
+  "description": "Does some simple stuff",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Click to show an alert"
+  },
+  "permissions": ["activeTab", "tabs", "scripting"],
+  
+  "icons": {
+    "16": "/img/logo.png",
+    "32": "/img/logo.png",
+    "48": "/img/logo.png",
+    "128": "/img/logo.png"
+  }
+}
