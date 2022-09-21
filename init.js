@@ -67,6 +67,8 @@ const genView = (elm) => {
     display:flex;
     flex-direction: column;
     align-items: center;
+    direction: ltr;
+    gap: 5px;
 `;
     elementView.id = ElmId.containerView;
     const tagName = elm.tagName.toLowerCase();
@@ -74,7 +76,7 @@ const genView = (elm) => {
     let html = `<h2>${tagName}</h2>`;
     for (let attr of attributes) {
         html += `
-            <div style="width:100%; display:flex; justify-content:space-between; column-gap:20px;"><b>${attr}:</b> <input data-for="${attr}" style="min-width:400px;" value="${elm.getAttribute(attr)}"/></div>
+            <div style="width:100%; display:flex; justify-content:space-between; column-gap:20px;"><b>${attr}:</b> <input data-for="${attr}" style="border:1px solid black;border-radius: 6px; min-width:400px;" value="${elm.getAttribute(attr)}"/></div>
         `
     }
     elementView.innerHTML = html;
@@ -123,8 +125,8 @@ const genView = (elm) => {
     const closeBtn = document.createElement("span");
     closeBtn.style = `
         position:absolute;
-        top:20px;
-        left:20px;
+        top:10px;
+        left:10px;
         width:30px;
         height:30px;
         cursor:pointer;
@@ -135,7 +137,6 @@ const genView = (elm) => {
         align-items:center;
         font-weight:600;
         font-size: 20px;
-
     `;
     closeBtn.innerHTML = `&#10006;`;
     closeBtn.addEventListener("click", () => {
