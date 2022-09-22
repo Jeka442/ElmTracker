@@ -78,6 +78,8 @@ const genView = (elm) => {
     align-items: center;
     direction: ltr;
     gap: 5px;
+    width:90vw;
+    max-width:700px;
 `;
     elementView.id = ElmId.containerView;
     const tagName = elm.tagName.toLowerCase();
@@ -85,10 +87,9 @@ const genView = (elm) => {
     let html = `<h2>${tagName}</h2>`;
     for (let attr of attributes) {
         html += `
-            <div style="width:100%; display:grid; grid-template-columns: auto 400px 70px; gap:10px; margin-bottom:5px;">
+            <div style="width:100%; display:grid; grid-template-columns: 100px auto 70px; gap:10px; margin-bottom:5px;">
                 <b>${attr}:</b> 
-                <input data-for="${attr}" style="min-width:400px;" value="${elm.getAttribute(attr)}"/>
-                <input data-for="${attr}" style="border:1px solid black;border-radius: 6px; min-width:400px;" value="${elm.getAttribute(attr)}"/></div>
+                <input data-for="${attr}" style="border:1px solid black; border-radius: 6px; width:100%; flex-grow: 1;" value="${elm.getAttribute(attr)}"/>
                 <button data-for="${attr}" class="${ElmClasses.removeAttr}">Remove</button>
             </div>
         `
@@ -108,11 +109,11 @@ const genView = (elm) => {
         for (let input of inputs) {
             let attrName = input.getAttribute(ElmAttrs.dataFor);
             let shouldRemove = input.getAttribute(ElmAttrs.removeState);
-            if (shouldRemove != null) {
+            if (shouldRemove) {
                 //for default attributes that we cant remove
-                elm.setAttribute(attrName, "");
-            }
-            {
+                elm.setAttribute(attrName, null);
+                elm.removeAttribute(attrName);
+            } else {
                 elm.setAttribute(attrName, input.value);
             }
             removeLayout();
@@ -191,5 +192,5 @@ const removeLayout = () => {
     const elementViewContainer = document.getElementById(ElmId.overLayer);
     document.getElementById(ElmId.activeSpan).setAttribute("isActive", "active");
     document.getElementById(ElmId.follower).style.opacity = 1;
-    elementViewContainer.remove();
+    if (elementViewContainer) elementViewContainer.remove();
 }
