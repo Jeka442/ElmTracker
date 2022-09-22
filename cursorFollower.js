@@ -3,7 +3,15 @@
 const div = document.createElement("span");
 div.id = "ElmTracker-follower";
 document.body.appendChild(div);
-div.style = `position:fixed; background-color:black; color:white; z-index:2147483637; padding-inline:7px`
+div.style = `
+    position:fixed; 
+    background-color:black; 
+    color:white; 
+    padding: 5px 10px;
+    border-radius: 8px;
+    z-index:2147483637; 
+    padding-inline:7px
+`
 
 
 document.body.addEventListener("mousemove", (e) => {

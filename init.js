@@ -5,6 +5,15 @@ const ElmId = {
     follower: "ElmTracker-follower"
 }
 
+const ElmClasses = {
+    removeAttr: "ElmTracler-removeAttr-btn"
+}
+
+const ElmAttrs = {
+    dataFor: "data-for",
+    removeState: "remove-state"
+}
+
 const activeSpan = document.createElement("span");
 activeSpan.style = `
         position: absolute;
@@ -74,7 +83,11 @@ const genView = (elm) => {
     let html = `<h2>${tagName}</h2>`;
     for (let attr of attributes) {
         html += `
-            <div style="width:100%; display:flex; justify-content:space-between; column-gap:20px;"><b>${attr}:</b> <input data-for="${attr}" style="min-width:400px;" value="${elm.getAttribute(attr)}"/></div>
+            <div style="width:100%; display:grid; grid-template-columns: auto 400px 70px; gap:10px; margin-bottom:5px;">
+                <b>${attr}:</b> 
+                <input data-for="${attr}" style="min-width:400px;" value="${elm.getAttribute(attr)}"/>
+                <button data-for="${attr}" class="${ElmClasses.removeAttr}">Remove</button>
+            </div>
         `
     }
     elementView.innerHTML = html;
@@ -90,8 +103,16 @@ const genView = (elm) => {
     saveBtn.addEventListener("click", () => {
         const inputs = elementView.getElementsByTagName("input");
         for (let input of inputs) {
-            let attrName = input.getAttribute("data-for");
-            elm.setAttribute(attrName, input.value);
+            let attrName = input.getAttribute(ElmAttrs.dataFor);
+            let shouldRemove = input.getAttribute(ElmAttrs.removeState);
+            if (shouldRemove != null) {
+                //for default attributes that we cant remove
+                elm.setAttribute(attrName, "");
+            }
+            {
+                elm.setAttribute(attrName, input.value);
+            }
+            removeLayout();
         }
 
     });
@@ -145,6 +166,22 @@ const genView = (elm) => {
     elementView.appendChild(closeBtn);
     elementViewContainer.appendChild(elementView);
     document.body.append(elementViewContainer);
+
+    document.querySelectorAll(`button.${ElmClasses.removeAttr}`).forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            const inp = e.target.previousElementSibling;
+            const state = inp.getAttribute(ElmAttrs.removeState);
+            if (state) {
+                inp.removeAttribute(ElmAttrs.removeState);
+                inp.disabled = false;
+                e.target.innerText = "Delete";
+            } else {
+                inp.setAttribute(ElmAttrs.removeState, "true");
+                inp.disabled = true;
+                e.target.innerText = "Restore";
+            }
+        })
+    });
 }
 
 
