@@ -84,7 +84,7 @@ const genView = (elm) => {
     elementView.id = ElmId.containerView;
     const tagName = elm.tagName.toLowerCase();
     const attributes = elm.getAttributeNames();
-    let html = `<h2>${tagName}</h2>`;
+    let html = `<h2>${tagName + (elm.id != "" ? `#${elm.id}` : "")}</h2>`;
     for (let attr of attributes) {
         html += `
             <div style="width:100%; display:grid; grid-template-columns: 100px auto 70px; gap:10px; margin-bottom:5px;">
@@ -101,6 +101,8 @@ const genView = (elm) => {
         padding: 5px 10px;
         cursor: pointer;
     `;
+
+
     const saveBtn = document.createElement("button");
     saveBtn.style = btnStyle;
     saveBtn.innerText = "Save";
@@ -166,6 +168,8 @@ const genView = (elm) => {
         removeLayout();
     })
 
+    elementView.appendChild(genElmTree(elm));
+
     elementView.appendChild(closeBtn);
     elementViewContainer.appendChild(elementView);
     document.body.append(elementViewContainer);
@@ -193,4 +197,48 @@ const removeLayout = () => {
     document.getElementById(ElmId.activeSpan).setAttribute("isActive", "active");
     document.getElementById(ElmId.follower).style.opacity = 1;
     if (elementViewContainer) elementViewContainer.remove();
+}
+
+
+const genElmTree = (elm) => {
+    const elmTree = [];
+    let parent = elm;
+    while (parent.nodeName != "HTML") {
+        elmTree.push(parent);
+        parent = parent.parentElement;
+    }
+    const container = document.createElement("div");
+    const tree = document.createElement("div");
+    tree.style = `
+    display:flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    column-gap: 15px;
+    `;
+
+    const treeHeader = document.createElement("h2");
+    treeHeader.style = `
+        padding:10px;
+        margin:0px;
+        width:100%;
+        text-align:center;
+    `;
+    treeHeader.innerText = "Elements tree"
+    container.appendChild(treeHeader);
+    elmTree.map((elm, index) => {
+        let span = document.createElement("span");
+        span.innerText = elm.nodeName.toLowerCase() + (elm.id != "" ? `#${elm.id}` : "");
+        span.style = `
+            cursor:pointer;
+            font-weight:${index == 0 ? 700 : 400};
+        `;
+        span.addEventListener("click", () => {
+            const elementViewContainer = document.getElementById(ElmId.overLayer);
+            elementViewContainer.remove();
+            genView(elm);
+        })
+        tree.appendChild(span);
+    });
+    container.append(tree);
+    return container;
 }
