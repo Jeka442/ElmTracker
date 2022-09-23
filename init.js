@@ -208,12 +208,16 @@ const genElmTree = (elm) => {
         parent = parent.parentElement;
     }
     const container = document.createElement("div");
+    container.style = `
+        max-width: 700px;
+    `;
     const tree = document.createElement("div");
     tree.style = `
     display:flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     justify-content: center;
     column-gap: 15px;
+    flex-wrap: wrap;
     `;
 
     const treeHeader = document.createElement("h2");
@@ -225,17 +229,25 @@ const genElmTree = (elm) => {
     `;
     treeHeader.innerText = "Elements tree"
     container.appendChild(treeHeader);
-    elmTree.map((elm, index) => {
+    elmTree.reverse().map((elm, index) => {
         let span = document.createElement("span");
         span.innerText = elm.nodeName.toLowerCase() + (elm.id != "" ? `#${elm.id}` : "");
         span.style = `
             cursor:pointer;
-            font-weight:${index == 0 ? 700 : 400};
+            font-weight:${index == elmTree.length - 1 ? 700 : 400};
         `;
         span.addEventListener("click", () => {
             const elementViewContainer = document.getElementById(ElmId.overLayer);
             elementViewContainer.remove();
             genView(elm);
+        })
+        var border;
+        span.addEventListener("mouseenter", () => {
+            border = elm.style.border;
+            elm.style.border = "4px dotted red";
+        })
+        span.addEventListener("mouseleave", () => {
+            elm.style.border = border ? border : "initial";
         })
         tree.appendChild(span);
     });
