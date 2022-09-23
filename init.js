@@ -236,18 +236,19 @@ const genElmTree = (elm) => {
             cursor:pointer;
             font-weight:${index == elmTree.length - 1 ? 700 : 400};
         `;
+        var border;
         span.addEventListener("click", () => {
             const elementViewContainer = document.getElementById(ElmId.overLayer);
+            elm.style.border = border ? border : "";
             elementViewContainer.remove();
             genView(elm);
         })
-        var border;
         span.addEventListener("mouseenter", () => {
             border = elm.style.border;
             elm.style.border = "4px dotted red";
         })
         span.addEventListener("mouseleave", () => {
-            elm.style.border = border ? border : "initial";
+            elm.style.border = border ? border : "";
         })
         tree.appendChild(span);
     });
